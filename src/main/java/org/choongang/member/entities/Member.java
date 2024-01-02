@@ -17,7 +17,7 @@ public class Member extends Base {
     private String email;
 
     @Column(length = 40, nullable = false, unique = true)
-    private String username;
+    private String userId;
 
     @Column(length = 65, nullable = false)
     private String password;
