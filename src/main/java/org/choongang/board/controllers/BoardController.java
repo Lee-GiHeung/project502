@@ -27,7 +27,7 @@ public class BoardController {
         data.setSubject("제목");
         data.setContent("내용");
         boardDataRepository.saveAndFlush(data);
-        */
+*/
     }
 
     @ResponseBody
