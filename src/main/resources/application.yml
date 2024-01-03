@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: devmode
   
   # 파일 업로드 용량 설정
   servlet:
@@ -27,7 +27,7 @@ spring:
         use_sql_comments: true
         dialect: org.hibernate.dialect.OracleDialect
     hibernate:
-      ddlAuto: update
+      ddlAuto: create
   
   # 타임리프 설정
   thymeleaf:
