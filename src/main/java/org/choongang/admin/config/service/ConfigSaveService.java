@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class ConfigSaveService {
     private final ConfigsRepository repository;
 
-    public <T> void save(String code, T data) {
+    public void save(String code, Object data) {
         Configs configs = repository.findById(code).orElseGet(Configs::new);
 
         ObjectMapper om = new ObjectMapper();
