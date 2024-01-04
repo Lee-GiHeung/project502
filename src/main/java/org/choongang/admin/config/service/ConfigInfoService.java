@@ -7,26 +7,30 @@ import lombok.RequiredArgsConstructor;
 import org.choongang.admin.config.entities.Configs;
 import org.choongang.admin.config.repositories.ConfigsRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
-public class ConfigSaveService {
+public class ConfigInfoService {
+
     private final ConfigsRepository repository;
 
-    public <T> void save(String code, T data) {
-        Configs configs = repository.findById(code).orElseGet(Configs::new);
+    public <T> T get(String code, Class<T> clazz) {
+        Configs config = repository.findById(code).orElse(null);
+        if(config == null || !StringUtils.hasText(config.getData())) {
+            return null;
+        }
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
 
+        String jsonString = config.getData();
         try {
-            String jsonString = om.writeValueAsString(data);
-            configs.setData(jsonString);
-            configs.setCode(code);
-            repository.saveAndFlush(configs);
-
+            T data = om.readValue(jsonString, clazz);
+            return data;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return null;
         }
     }
 }
