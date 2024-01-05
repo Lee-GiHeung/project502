@@ -94,7 +94,7 @@ public class Utils {
                 .map(s -> s.replaceAll("\\s", ""))
                 .map(this::toConvert).toList();
 
-        return null;
+        return data;
     }
 
     private int[] toConvert(String size) {
