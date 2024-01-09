@@ -57,7 +57,6 @@ commonLib.fileManager = {
             ajaxLoad("POST", "/api/file", formData, "json")
                 .then(res => { // 요청 성공시
                     if(res && res.success) { // 파일 업로드 성공시
-
                         if(typeof parent.callbackFileUpload == 'function') {
                             parent.callbackFileUpload(res.data);
                         }

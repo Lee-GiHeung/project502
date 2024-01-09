@@ -3,11 +3,12 @@
 *
 * @params files: 업로드 한 파일 정보 목록
 */
+
 function callbackFileUpload(files) {
+    console.log("테스트");
     if(!files || files.length == 0) {
         return;
     }
-
     const file = files[0];
 
     let html = document.getElementById("image1_tpl").innerHTML;
@@ -17,7 +18,6 @@ function callbackFileUpload(files) {
 
     html = html.replace(/\[seq\]/g, seq)
                 .replace(/\[imageUrl\]/g, imageUrl);
-
     const domParser = new DOMParser();
     const dom = domParser.parseFromString(html, "text/html");
 
