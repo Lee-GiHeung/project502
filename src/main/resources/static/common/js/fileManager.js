@@ -82,7 +82,6 @@ window.addEventListener("DOMContentLoaded", function(){
     // 파일 업로드 버튼 클릭 처리 -> 파일 탐색기 열기
     for (const el of uploadFiles) {
         el.addEventListener("click", function() {
-
             const fileEl = document.createElement("input");
             fileEl.type="file";
             fileEl.multiple = true; // 여러개 파일 선택 가능

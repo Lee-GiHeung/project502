@@ -25,7 +25,6 @@ function callbackFileUpload(files) {
 
     const profileImage = document.getElementById("profile_image");
     profileImage.innerHTML = "";
-
     profileImage.appendChild(imageTplEl);
 }
 
@@ -37,5 +36,7 @@ function callbackFileUpload(files) {
 */
 function callbackFileUpload(seq) {
     const fileEl = document.getElementById(`file_${seq}`);
-    fileEl.parentElement.removeChild(fileEl);
+    if (fileEl) {
+        fileEl.parentElement.removeChild(fileEl);
+    }
 }
