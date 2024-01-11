@@ -1,11 +1,17 @@
-package org.choongang.product.controllers;
+package org.choongang.admin.product.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.admin.menus.Menu;
 import org.choongang.admin.menus.MenuDetail;
 import org.choongang.commons.ExceptionProcessor;
+import org.choongang.commons.Utils;
+import org.choongang.commons.exceptions.AlertException;
+import org.choongang.product.service.CategorySaveService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +25,9 @@ import java.util.Objects;
 @RequestMapping("/admin/product")
 @RequiredArgsConstructor
 public class ProductController implements ExceptionProcessor {
+
+    private final CategoryValidator categoryValidator;
+    private final CategorySaveService categorySaveService;
 
     @ModelAttribute("menuCode")
     public String getMenuCode() {
@@ -48,6 +57,8 @@ public class ProductController implements ExceptionProcessor {
      * @param model
      * @return
      */
+
+    @GetMapping("/add")
     public String add(Model model) {
         commonProcess("add", model);
 
@@ -60,6 +71,8 @@ public class ProductController implements ExceptionProcessor {
      * @param model
      * @return
      */
+
+    @PostMapping("/save")
     public String save(Model model) {
 
         return "redirect:/admin/product";
@@ -72,7 +85,7 @@ public class ProductController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/category")
-    public String category(Model model) {
+    public String category(@ModelAttribute RequestCategory form, Model model) {
         commonProcess("category", model);
 
         return "admin/product/category";
@@ -85,10 +98,26 @@ public class ProductController implements ExceptionProcessor {
      * @return
      */
     @PostMapping("/category")
-    public String categoryPs(Model model) {
+    public String categoryPs(@Valid RequestCategory form, Errors errors, Model model) {
         commonProcess("category", model);
 
-        return "admin/product/category";
+        categoryValidator.validate(form, errors);
+
+        if (errors.hasErrors()) {
+            List<String> messages = errors.getFieldErrors()
+                    .stream()
+                    .map(e -> e.getCodes())
+                    .map(s -> Utils.getMessage(s[0]))
+                    .toList();
+
+            throw new AlertException(messages.get(0), HttpStatus.BAD_REQUEST);
+        }
+
+        categorySaveService.save(form);
+
+        // 분류 추가가 완료되면 부모창 새로고침
+        model.addAttribute("script", "parent.location.reload()");
+        return "common/_execute_script";
     }
 
     /**
@@ -116,5 +145,6 @@ public class ProductController implements ExceptionProcessor {
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCommonSdcript", addCommonScript);
+        model.addAttribute("subMenuCode", mode);
     }
 }
