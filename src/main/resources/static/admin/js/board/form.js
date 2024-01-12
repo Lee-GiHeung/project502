@@ -109,9 +109,8 @@ function callbackFileUpload(files) {
         }
 
         /* 더블 클릭시 파일 삭제 처리 S */
-        logoBox.addEventListener("dblclick", () => deleteDragDropImage(seq));
+        logoBox.addEventListener("dblclick", () => deleteDragDropImage(file.seq));
         /* 더블 클릭시 파일 삭제 처리 E */
-
     }
 }
 
@@ -147,5 +146,4 @@ function callbackFileDelete(seq) {
     const fileBox = document.getElementById(`file_${seq}`);
     fileBox.classList.remove('uploaded');
     fileBox.style.backgroundImage = fileBox.style.backgroundPosition = fileBox.style.backgroundSize = null;
-
 }
