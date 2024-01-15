@@ -160,7 +160,7 @@ public class BoardController implements ExceptionProcessor {
         if(mode.equals("add")) {
             pageTitle = "게시판 등록";
 
-        } else if (mode.equals("eidt")) {
+        } else if (mode.equals("edit")) {
             pageTitle = "게시판 수정";
 
         } else if (mode.equals("posts")) {

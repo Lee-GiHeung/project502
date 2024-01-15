@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
 // 에디터에 이미지 추가
 function insertImage(source) {
-    editor.execute('insert_image', { source })
+    editor.execute('insertImage', { source })
 }
 
 /**
@@ -48,7 +48,7 @@ function callbackFileUpload(files) {
             imageUrls.push(file.fileUrl);
         }
 
-        html = html.replace(/\\[seq\]/g, file.seq)
+        html = html.replace(/\[seq\]/g, file.seq)
                     .replace(/\[fileName\]/g, file.fileName)
                     .replace(/\[imageUrl\]/g, file.fileUrl);
 

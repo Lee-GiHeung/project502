@@ -162,7 +162,7 @@ public class BoardController implements ExceptionProcessor {
 
             // 이미지 또는 파일 첨부를 사용하는 경우
             if(board.isUseUploadImage() || board.isUseUploadFile()) {
-                addCommonScript.add("fileMager");
+                addCommonScript.add("fileManager");
             }
 
             addScript.add("board/form");

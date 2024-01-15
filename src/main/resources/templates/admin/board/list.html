@@ -55,7 +55,7 @@
                 <tr th:unless="${items == null || items.isEmpty()}"
                     th:each="item,status : ${items}" th:object="${item}">
                     <td>
-                        <input type="hidden" name="${'bid_' + status.index}"
+                        <input type="hidden" th:name="${'bid_' + status.index}"
                             th:value="*{bid}">
                         <input type="checkbox" name="chk" th:value="${status.index}"
                             th:id="${'chk_' + status.index}">
@@ -68,16 +68,16 @@
                             value="true" th:checked="*{active}" th:id="${'active_true_' + status.index}">
                         <label th:for="${'active_true' + status.index}">사용</label>
 
-                        <input type="radio" th:name="${'!active_' + status.index}"
-                               value="false" th:checked="*{active}" th:id="${'active_false_' + status.index}">
+                        <input type="radio" th:name="${'active_' + status.index}"
+                               value="false" th:checked="*{!active}" th:id="${'active_false_' + status.index}">
                         <label th:for="${'active_false_' + status.index}">미사용</label>
                     </td>
 
                     <td>
-                        <a th:href="@{/admin/board/editor/{bid}/(bid=*{bid})}" class="sbtn">
+                        <a th:href="@{/admin/board/edit/{bid}(bid=*{bid})}" class="sbtn">
                            <i class="xi-pen"></i> 수정하기
                         </a>
-                        <a th:href="@{/admin/board/editor/{bid}/(bid=*{bid})}" class="sbtn on">
+                        <a th:href="@{/board/list/{bid}(bid=*{bid})}" class="sbtn on" target="_blank">
                             <i class="xi-pen"></i> 미리보기
                         </a>
                     </td>
