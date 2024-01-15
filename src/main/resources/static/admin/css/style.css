@@ -75,6 +75,11 @@ select { border: 1px solid #d5d5d5; height: 35px; }
 color: #222; border-radius: 3px; cursor: pointer; line-height: 43px; }
 .submit_btns .btn:last-of-type {background: #222; color: #fff; }
 
+.search_btn { text-align: center; margin: 20px 0 30px; }
+.search_btn .btn { display: inline-block; min-width: 200px; text-align: center;
+ font-size:1.4rem; font-weight: 500; height: 45px; line-height: 45px;
+ background: #596b99; color: #fff; cursor: pointer; border-radius: 3px; border: 0; }
+
 .sbtn { border: 1px solid #222; color: #222; background: #fff; display: inline-block;
     padding: 5px 20px; border-radius: 3px; border-radius: 3px; cursor: pointer; line-height: 1; }
 .sbtn:hover, .sbtn.on { background: #596b99; color: #fff; border-color: #596b99; }
@@ -117,3 +122,7 @@ border-radius: 3px; margin-top: 2px 2px 0 0; background: #fff; }
     absolute; top: 0; left: 0; width: 100%; height: 100%; line-height: 100%; text-align: center;
     text-shadow: 2px 2px 5px #555; color:#596b99; font-weight: 500; font-size:1.15rem; }
 /* 파일 공통 E */
+
+/* 입력 항목 그룹화 */
+.input_grp { display : flex; align-items: center; }
+.input_grp > * + * { margin-left: 3px; }
