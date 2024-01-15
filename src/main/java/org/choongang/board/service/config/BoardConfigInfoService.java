@@ -70,6 +70,7 @@ public class BoardConfigInfoService {
      */
     public void addBoardInfo(Board board) {
         String gid = board.getGid();
+
         List<FileInfo> htmlTopImages = fileInfoService
                 .getListDone(gid, "html_Top");
 
