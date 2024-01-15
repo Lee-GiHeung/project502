@@ -68,7 +68,7 @@ public class BoardController implements ExceptionProcessor {
      * @param chks
      * @return
      */
-    @PatchMapping("/")
+    @PatchMapping
     public String editList(@RequestParam("chk") List<Integer> chks, Model model) {
         commonProcess("list", model);
 
@@ -126,6 +126,7 @@ public class BoardController implements ExceptionProcessor {
         configValidator.validate(config, errors);
 
         if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(System.out::println);
             return "admin/board/" + mode;
         }
 
