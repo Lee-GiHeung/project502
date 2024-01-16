@@ -3,8 +3,12 @@ package org.choongang.board.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
+import org.choongang.board.entities.BoardData;
+import org.choongang.board.service.BoardInfoService;
+import org.choongang.board.service.BoardSaveService;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
+import org.choongang.commons.ListData;
 import org.choongang.commons.Utils;
 import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileInfoService;
@@ -28,12 +32,15 @@ public class BoardController implements ExceptionProcessor {
     private final FileInfoService fileInfoService;
 
     private final BoardFormValidator boardFormValidator;
+    private final BoardSaveService boardSaveService;
+    private final BoardInfoService boardInfoService;
 
     private final MemberUtil memberUtil;
     private final Utils utils;
 
     private Board board; // 게시판 설정
-
+    private BoardData boardData; // 게시글
+    
     /**
      * 게시판 목록
      * 
@@ -42,8 +49,14 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/list/{bid}")
-    public String list(@PathVariable("bid") String bid, Model model) {
+    public String list(@PathVariable("bid") String bid,
+                       @ModelAttribute BoardDataSearch search, Model model) {
         commonProcess(bid, "list", model);
+
+        ListData<BoardData> data = boardInfoService.getList(bid, search);
+
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("board/list");
     }
@@ -56,8 +69,10 @@ public class BoardController implements ExceptionProcessor {
      */
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
-        commonProcess(seq, "view", model);
+        boardInfoService.updateViewCount(seq); // 조회수 업데이트
 
+        commonProcess(seq, "view", model);
+        
         return utils.tpl("board/view");
     }
 
@@ -93,6 +108,8 @@ public class BoardController implements ExceptionProcessor {
     public String update(@PathVariable("seq") Long seq, Model model) {
         commonProcess(seq, "update", model);
 
+        RequestBoard form = boardInfoService.getForm(boardData);
+        model.addAttribute("requestBoard", form);
         return utils.tpl("board/update");
     }
 
@@ -116,11 +133,12 @@ public class BoardController implements ExceptionProcessor {
             return utils.tpl("board/" + mode);
         }
 
-        Long seq = 0L; // 임시
+        // 게시글 저장 처리
+        BoardData boardData = boardSaveService.save(form);
 
         String redirectURL = "redirect:/board/";
-        redirectURL += board.getLocationAfterWriting() == "view" ? "view/" + seq :
-        "list/" + form.getBid();
+        redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" +
+        boardData.getSeq() : "list/" + form.getBid();
 
         return redirectURL;
     }
@@ -170,6 +188,10 @@ public class BoardController implements ExceptionProcessor {
             pageTitle += " ";
             pageTitle += mode.equals("update") ? Utils.getMessage("글수정", "commons")
                     : Utils.getMessage("글쓰기", "commons");
+        
+        } else if(model.equals("view")) {
+            // pageTitle - 글 제목 - 게시판 명
+            String subject = boardData.getSubject();
         }
         
         model.addAttribute("addCommonCss", addCommonCss);
@@ -183,11 +205,17 @@ public class BoardController implements ExceptionProcessor {
      * 게시판 공통 처리 : 게시글 보기, 게시글 수정 - 게시글 번호가 있는 경우
      *      - 게시글 조회 -> 게시판 설정
      *
-     * @param seq
+     * @param seq : 게시글 번호
      * @param mode
      * @param model
      */
     private void commonProcess(Long seq, String mode, Model model) {
+        boardData = boardInfoService.get(seq);
+
+        String bid = boardData.getBoard().getBid();
+        commonProcess(bid, mode, model);
+
+        model.addAttribute("boardData", boardData);
 
     }
 }
