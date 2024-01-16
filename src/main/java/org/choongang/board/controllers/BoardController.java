@@ -62,8 +62,10 @@ public class BoardController implements ExceptionProcessor {
      */
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
-        commonProcess(seq, "view", model);
+        boardInfoService.updateViewCount(seq); // 조회수 업데이트
 
+        commonProcess(seq, "view", model);
+        
         return utils.tpl("board/view");
     }
 
