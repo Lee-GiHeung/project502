@@ -18,13 +18,16 @@ import java.util.UUID;
 @Entity
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
-@Table(name="BOARD")
+@Table(name="BOARD", indexes = @Index(name="idx_board_basic",
+        columnList = "listOrder DESC, createdAt DESC"))
 public class Board extends BaseMember {
     @Id
     private String bid; // 게시판 아이디
 
     @Column(length = 65, nullable = false)
     private String gid = UUID.randomUUID().toString();
+
+    private int listOrder; // 진열 가중치
 
     @Column(length = 60, nullable = false)
     private String bName; // 게시판 이름

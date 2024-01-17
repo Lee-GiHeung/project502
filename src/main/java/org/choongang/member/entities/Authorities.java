@@ -6,7 +6,7 @@ import org.choongang.member.Authority;
 
 @Data
 @Entity
-@Table(indexes = @Index(name="uq_member_authority", columnList = "member_seq, authority",
+@Table(name="AUTHORITIES", indexes = @Index(name="uq_member_authority", columnList = "member_seq, authority",
         unique = true))
 public class Authorities {
     @Id

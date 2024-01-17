@@ -11,6 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name="MEMBER")
 public class Member extends Base {
     @Id @GeneratedValue
     private Long seq;
