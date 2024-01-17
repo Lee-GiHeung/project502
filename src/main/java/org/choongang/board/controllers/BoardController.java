@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
 import org.choongang.board.entities.BoardData;
-import org.choongang.board.service.BoardDeleteService;
-import org.choongang.board.service.BoardInfoService;
-import org.choongang.board.service.BoardSaveService;
-import org.choongang.board.service.GuestPasswordCheckException;
+import org.choongang.board.service.*;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.ListData;
@@ -39,6 +36,7 @@ public class BoardController implements ExceptionProcessor {
     private final BoardSaveService boardSaveService;
     private final BoardInfoService boardInfoService;
     private final BoardDeleteService boardDeleteService;
+    private final BoardAuthService boardAuthService;
 
     private final MemberUtil memberUtil;
     private final Utils utils;
@@ -125,6 +123,7 @@ public class BoardController implements ExceptionProcessor {
 
         RequestBoard form = boardInfoService.getForm(boardData);
         model.addAttribute("requestBoard", form);
+
         return utils.tpl("board/update");
     }
 
@@ -165,6 +164,23 @@ public class BoardController implements ExceptionProcessor {
         boardDeleteService.delete(seq);
 
         return "redirect:/board/list" + board.getBid();
+    }
+
+    /**
+     * 비회원 글수정, 글삭제 비밀번호 확인
+     *
+     * @param password
+     * @param model
+     * @return
+     */
+    @PostMapping
+    public String passwordCheck(@RequestParam(name="password", required = false) String password,
+                                Model model) {
+        boardAuthService.validate(password);
+
+        model.addAttribute("script", "parent.location.reload();");
+
+        return "common/_execute_script";
     }
 
     /**
@@ -234,6 +250,9 @@ public class BoardController implements ExceptionProcessor {
      * @param model
      */
     private void commonProcess(Long seq, String mode, Model model) {
+        // 글 수정, 글 삭제 권한 체크
+        boardAuthService.check(mode, seq);
+
         boardData = boardInfoService.get(seq);
 
         String bid = boardData.getBoard().getBid();
