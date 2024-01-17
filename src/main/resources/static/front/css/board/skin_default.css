@@ -31,3 +31,8 @@ padding: 7px 15px; }
 .board_list .items .subject { flex-grow: 1; padding: 10px; }
 .board_list .write_btn { background: #596b99; color: #fff; height: 35px; line-height: 35px;
 cursor: pointer; padding: 0 30px; border-radius: 3px; }
+
+
+.board_list .list_search { padding: 10px; border-bottom: 1px solid #d5d5d5; }
+.board_list .list_search > form { display: flex; }
+

@@ -163,7 +163,7 @@ public class BoardController implements ExceptionProcessor {
 
         boardDeleteService.delete(seq);
 
-        return "redirect:/board/list" + board.getBid();
+        return "redirect:/board/list/" + board.getBid();
     }
 
     /**
@@ -173,7 +173,7 @@ public class BoardController implements ExceptionProcessor {
      * @param model
      * @return
      */
-    @PostMapping
+    @PostMapping("/password")
     public String passwordCheck(@RequestParam(name="password", required = false) String password,
                                 Model model) {
 
