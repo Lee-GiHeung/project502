@@ -55,12 +55,12 @@ public class BoardController implements ExceptionProcessor {
     public String list(@PathVariable("bid") String bid,
                        @ModelAttribute BoardDataSearch search, Model model) {
         commonProcess(bid, "list", model);
-        /*
+
         ListData<BoardData> data = boardInfoService.getList(bid, search);
 
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
-        */
+
         return utils.tpl("board/list");
     }
 
@@ -149,7 +149,7 @@ public class BoardController implements ExceptionProcessor {
 
         // 게시글 저장 처리
         BoardData boardData = boardSaveService.save(form);
-
+        System.out.println("boardData" + boardData);
         String redirectURL = "redirect:/board/";
         redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" +
         boardData.getSeq() : "list/" + form.getBid();
@@ -176,6 +176,7 @@ public class BoardController implements ExceptionProcessor {
     @PostMapping
     public String passwordCheck(@RequestParam(name="password", required = false) String password,
                                 Model model) {
+
         boardAuthService.validate(password);
 
         model.addAttribute("script", "parent.location.reload();");
@@ -202,6 +203,9 @@ public class BoardController implements ExceptionProcessor {
 
         /* 게시판 설정 처리 S */
         board = configInfoService.get(bid);
+
+        // 접근 권한 체크
+        boardAuthService.accessCheck(mode, board);
 
         // 스킨별 css, js 추가
         String skin = board.getSkin();
