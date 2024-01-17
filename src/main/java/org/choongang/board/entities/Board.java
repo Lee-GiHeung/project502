@@ -18,6 +18,7 @@ import java.util.UUID;
 @Entity
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
+@Table(name="BOARD")
 public class Board extends BaseMember {
     @Id
     private String bid; // 게시판 아이디
@@ -47,7 +48,9 @@ public class Board extends BaseMember {
     private boolean useUploadFile; // 파일 첨부 사용 여부
 
     @Column(length = 10 , nullable = false)
-    private String locationAfterWriting = "LIST"; // 글 작성 후 이동 위치
+    private String locationAfterWriting = "list"; // 글 작성 후 이동 위치
+
+    private boolean showListBelowView; // 글 보기 하단 게시글 목록 노출 여부
 
     @Column(length = 10, nullable = false)
     private String skin = "default"; // 스킨
