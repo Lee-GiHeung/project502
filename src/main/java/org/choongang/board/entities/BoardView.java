@@ -1,9 +1,6 @@
 package org.choongang.board.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(BoardViewId.class)
+@Table(name="BOARD_VIEW")
 public class BoardView {
     @Id
     private Long seq; // 게시글 번호

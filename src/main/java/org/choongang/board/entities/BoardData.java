@@ -16,8 +16,10 @@ import java.util.UUID;
 @Builder
 @Entity
 @NoArgsConstructor @AllArgsConstructor
-@Table(indexes = {
-        @Index(name="idx_boardData_basic", columnList = "notice DESC createdAt DESC")
+@Table(
+        name="BOARD_DATA",
+        indexes = {
+        @Index(name="idx_boardData_basic", columnList = "notice DESC, createdAt DESC")
 })
 public class BoardData extends Base {
     @Id @GeneratedValue
@@ -85,4 +87,20 @@ public class BoardData extends Base {
 
     @Transient
     private List<FileInfo> attachFiles; // 첨부 파일
+
+    @Transient
+    private boolean editable; // 수정 가능 여부
+
+    @Transient
+    private boolean deletable; // 삭제 가능 여부
+
+    @Transient
+    private boolean mine; // 게시글 소유자
+
+    @Transient
+    private boolean showEditButton; // 수정 버튼 노출 여부
+
+    @Transient
+    private boolean showDeleteButton; // 삭제 버튼 노출 여부
+    
 }

@@ -113,13 +113,14 @@ public class Utils {
     }
 
     public String printThumb(long seq, int width, int height, String className) {
-        String[] data = fileInfoService.getThumb(seq, width, height);
-
-        if(data != null) {
-            String cls = StringUtils.hasText(className) ? " class='" + className + "'" : "";
-            String image = String.format("<image src='%s'%s>", data[1], cls);
-            return image;
-        }
+        try {
+            String[] data = fileInfoService.getThumb(seq, width, height);
+            if (data != null) {
+                String cls = StringUtils.hasText(className) ? " class='" + className + "'" : "";
+                String image = String.format("<image src='%s'%s>", data[1], cls);
+                return image;
+            }
+        } catch (Exception e) {}
 
         return "";
     }
@@ -183,5 +184,16 @@ public class Utils {
         String ua = request.getHeader("User-Agent");
 
         return Objects.hash(ip, ua);
+    }
+
+    /**
+     * 삭제 버튼 클릭시 "정말 삭제하시겠습니까?" confirm 대화상자 출력
+     * 
+     * @return
+     */
+    public String confirmDelete() {
+        String message = Utils.getMessage("Confirm.delete.message", "commons");
+
+        return String.format("return confirm('%s');", message);
     }
 }
