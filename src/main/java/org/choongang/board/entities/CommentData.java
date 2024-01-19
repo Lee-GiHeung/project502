@@ -37,10 +37,11 @@ public class CommentData extends Base {
     @Column(nullable = false)
     private String content; // 댓글 내용
 
+    @Column(length = 20)
     private String ip; // 작성자 IP 주소
+
+    @Column(length = 100)
     private String ua; // 작성자 User-Agent 정보
-
-
 
     private long listOrder; // 댓글 1차 정렬 기준
     private int depth; // 대댓글 들여쓰기 정도

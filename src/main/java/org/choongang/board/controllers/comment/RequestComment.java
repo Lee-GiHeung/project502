@@ -8,6 +8,8 @@ public class RequestComment {
     private String mode = "add";
 
     private Long seq; // 댓글 등록 번호
+    
+    private Long boardDataSeq; // 게시글 번호
 
     @NotBlank
     private String commenter; // 댓글 작성자
