@@ -112,6 +112,16 @@ public class BoardController implements ExceptionProcessor {
         return "admin/board/edit";
     }
 
+    @GetMapping("/delete/{bid}")
+    public String delete(@PathVariable("bid") String bid, Model model) {
+        commonProcess("delete", model);
+
+        RequestBoardConfig form = configInfoService.getForm(bid);
+        model.addAttribute("requestBoardConfig", form);
+
+        return "admin/board/delete";
+    }
+
     /**
      * 게시판 등록/수정 처리
      *
