@@ -21,7 +21,7 @@ import java.util.UUID;
         indexes = {
         @Index(name="idx_boardData_basic", columnList = "notice DESC, createdAt DESC")
 })
-public class BoardData extends Base {
+public class BoardData extends Base implements AuthCheck {
     @Id @GeneratedValue
     private Long seq;
 
