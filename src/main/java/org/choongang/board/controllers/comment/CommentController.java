@@ -2,6 +2,7 @@ package org.choongang.board.controllers.comment;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.choongang.board.entities.CommentData;
 import org.choongang.board.service.comment.CommentSaveService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
@@ -42,9 +43,13 @@ public class CommentController implements ExceptionProcessor {
                 HttpStatus.BAD_REQUEST);
         }
 
-        commentSaveService.save(form); // 댓글 저장, 수정
+        CommentData commentData = commentSaveService.save(form); // 댓글 저장, 수정
 
-        model.addAttribute("script", "parent.location.reload();");
+        String script = String.format("parent.location.replace('/board/view/&d#comment_%d');",
+            commentData.getBoardData().getSeq(), commentData.getSeq());
+
+        model.addAttribute("script", script);
+
         return "common/_execute_script";
     }
 
