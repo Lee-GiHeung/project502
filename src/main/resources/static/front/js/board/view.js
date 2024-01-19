@@ -52,8 +52,46 @@ window.addEventListener("DOMContentLoaded", function(){
                 ajaxLoad('GET', `/api/comment/${seq}`, null, 'json')
                     .then(res => {
                         if( res.success && res.data) {
-                            textArea.value = res.data.content;
+                            const data = res.data;
                             targetEl.innerHTML = "";
+                            if(!data.member && !data.editable) {
+                                // 비회원 비밀번호 확인 필요
+                                const passwordBox = document.createElement("input");
+                                passwordBox.type = "password";
+                                passwordBox.placeholder = "비밀번호 입력";
+
+                                const button = document.createElement("button");
+                                button.type= 'button';
+
+                                const buttonTxt = document.createTextNode("확인");
+                                button.appendChild(buttonTxt);
+
+                                targetEl.appendChild(passwordBox);
+                                targetEl.appendChild(button);
+
+                                const guestPw = passwordBox.value.trim();
+                                if(!guestPw) {
+                                    alert("비밀번호를 입력하세요.");
+                                    passwordBox.focus();
+                                    return;
+                                }
+
+                                button.addEventListener("click", function() {
+
+                                    ajaxLoad("GET", `/api/comment/auth_check?seq=${seq}&guestPw=${guestPw}`,
+                                     null, 'json')
+                                        .then(res => {
+                                            targetEl.innerHTML = "";
+                                            textArea.value = data.content;
+                                            targetEl.appendChild(textArea);
+
+                                       })
+                                       .catch(err => console.log(err));
+
+                                });
+                            }
+
+                            textArea.value = data.content;
                             targetEl.appendChild(textArea);
 
                         }
@@ -68,7 +106,7 @@ window.addEventListener("DOMContentLoaded", function(){
                         console.log(data.data);
                     })
                     .catch(err => console.log(err));
-                    */
+                */
             }
 
         });

@@ -18,7 +18,6 @@ public class ApiCommentController implements ExceptionRestProcessor {
     private final CommentSaveService commentSaveService;
     private final BoardAuthService boardAuthService;
 
-
     @GetMapping("/{seq}")
     public JSONData<CommentData> getComment(@PathVariable("seq") Long seq) {
 
@@ -34,6 +33,15 @@ public class ApiCommentController implements ExceptionRestProcessor {
 
         form.setMode("edit");
         commentSaveService.save(form);
+
+        return new JSONData<>();
+    }
+
+    @GetMapping("/auth_check")
+    public JSONData<Object> authCheck(@RequestParam("seq") Long seq,
+                                      @RequestParam("guestPw") String guestPw) {
+
+        boardAuthService.check("comment_update", seq);
 
         return new JSONData<>();
     }
