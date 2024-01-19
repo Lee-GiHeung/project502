@@ -33,11 +33,6 @@ public class BoardSaveService {
 
         Long seq = form.getSeq();
 
-        // 수정 권한 체크
-        if(mode.equals("update")) {
-            boardAuthService.check(mode, seq);
-        }
-
         BoardData data = null;
 
         if(seq != null && mode.equals("update")) { // 글 수정

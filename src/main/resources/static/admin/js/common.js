@@ -17,6 +17,8 @@ window.addEventListener("DOMContentLoaded", function() {
 
            const chks = formEl.querySelectorAll("input[name='chk']:checked");
 
+
+
            if (chks.length == 0) { // 체크가 안된 경우
                 alert(`${modeTitle}할 항목을 선택하세요.`);
                 return;

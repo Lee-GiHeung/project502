@@ -233,9 +233,9 @@ public class BoardController implements ExceptionProcessor {
             pageTitle += mode.equals("update") ? Utils.getMessage("글수정", "commons")
                     : Utils.getMessage("글쓰기", "commons");
         
-        } else if(model.equals("view")) {
+        } else if (mode.equals("view")) {
             // pageTitle - 글 제목 - 게시판 명
-            String subject = boardData.getSubject();
+            pageTitle = String.format("%s | %s", boardData.getSubject(), board.getBName());
         }
         
         model.addAttribute("addCommonCss", addCommonCss);
