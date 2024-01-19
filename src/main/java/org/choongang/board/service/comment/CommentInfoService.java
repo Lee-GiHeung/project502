@@ -8,6 +8,8 @@ import org.choongang.board.entities.CommentData;
 import org.choongang.board.entities.QCommentData;
 import org.choongang.board.repositories.BoardDataRepository;
 import org.choongang.board.repositories.CommentDataRepository;
+import org.choongang.member.MemberUtil;
+import org.choongang.member.entities.Member;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class CommentInfoService {
 
     private final CommentDataRepository commentDataRepository;
     private final BoardDataRepository boardDataRepository;
+    private final MemberUtil memberUtil;
 
     /**
      * 댓글 단일 조회
@@ -33,6 +36,8 @@ public class CommentInfoService {
     public CommentData get(Long seq) {
         CommentData data = commentDataRepository.findById(seq)
             .orElseThrow(CommentNotFoundException::new);
+
+        addCommentInfo(data);
 
         return data;
     }
@@ -60,7 +65,43 @@ public class CommentInfoService {
         List<CommentData> items = (List<CommentData>) commentDataRepository.findAll(andBuilder,
             Sort.by(desc("listOrder"), asc("createdAt")));
 
+        items.forEach(this::addCommentInfo);
+
         return items;
+    }
+
+    /**
+     * 댓글 추가 정보 처리
+     *
+     * @param data
+     */
+    private void addCommentInfo(CommentData data) {
+        boolean editable = false, deletable = false, mine = false;
+
+        Member _member = data.getMember(); // 댓글을 작성한 회원
+
+        /*
+         * 1) 관리자는 댓글 수정, 삭제 제한 없음
+         * 2) 비회원 댓글 - 비밀번호 확인, editable, deletable = true
+         *
+         */
+        if(memberUtil.isAdmin() || _member == null) {
+            editable = deletable = true;
+            mine = false;
+        }
+
+        /**
+         * 회원이 작성한 댓글이면 현재 로그인 사용자의 아이디와 동일해야 수정, 삭제 가능
+         *
+         */
+        if(_member != null && memberUtil.isLogin()
+                && _member.getUserId().equals(memberUtil.getMember().getUserId())) {
+            editable = deletable = mine = true;
+        }
+
+        data.setEditable(editable);
+        data.setDeletable(deletable);
+        data.setMine(mine);
     }
 
     /**
