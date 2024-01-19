@@ -21,7 +21,7 @@ import java.util.UUID;
         indexes = {
         @Index(name="idx_boardData_basic", columnList = "notice DESC, createdAt DESC")
 })
-public class BoardData extends Base {
+public class BoardData extends Base implements AuthCheck {
     @Id @GeneratedValue
     private Long seq;
 
@@ -55,9 +55,12 @@ public class BoardData extends Base {
 
     private int viewCount; // 조회수
 
+    private int CommentCount; // 댓글 수
+
     @Column(length = 20)
     private String ip; // IP 주소
 
+    @Column(length = 150)
     private String ua; // User-Agent : 브라우저 정보
     
     private Long num1; // 추가 필드 : 정수
@@ -102,5 +105,8 @@ public class BoardData extends Base {
 
     @Transient
     private boolean showDeleteButton; // 삭제 버튼 노출 여부
-    
+
+    @Transient
+    private List<CommentData> comments; // 댓글 목록
+
 }
