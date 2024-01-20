@@ -49,8 +49,9 @@
         </ul>
 
         <div class="share_btns">
-            <button class="save_post" sec:authorize="isAuthenticated()">
-                <i class="xi-heart"></i>
+            <button class="save_post" th:data-seq="*{seq}" sec:authorize="isAuthenticated()"
+                    th:data-seq="*{seq}" th:classappend="*{@saveBoardDataService.saved(seq)} ? 'on'">
+                <i class="xi-star"></i>
             </button>
         </div>
 
