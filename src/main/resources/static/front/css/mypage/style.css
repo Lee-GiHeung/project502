@@ -9,7 +9,7 @@ main > section h1 { line-height: 1; margin-bottom: 25px; font-size: 1.5rem; }
 .save_post_page .items li + li { margin-top: 10px; }
 .save_post_page .subject { padding: 10px 15px; cursor: pointer; }
 .save_post_page .subject .content { background: f8f8f8; padding: 15px; border-radius: 5px;
- margin-top: 10px; transition: min-height 0.5s; min-height: 300px; }
-.save_post_page .content_hide { transition: min-height: 0.5s; }
+ margin-top: 10px; transition: all 0.5s; min-height: 300px; }
+.save_post_page .content_hide { transition: all 0.5s; }
 
 

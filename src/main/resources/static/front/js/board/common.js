@@ -42,6 +42,10 @@ window.addEventListener("DOMContentLoaded", function() {
                 boardLib.save(bSeq);
                 this.classList.add('on');
             }
+
+            if(this.dataset.refresh == 'true') {
+                location.reload();
+            }
         });
     }
 

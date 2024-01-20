@@ -6,7 +6,6 @@ window.addEventListener("DOMContentLoaded", function() {
             const contentEl = el.nextElementSibling;
             const classList = contentEl.classList;
             classList.toggle('hide');
-
         });
     }
 });
