@@ -16,5 +16,4 @@ public class SaveBoardData extends Base {
 
     @Id
     private Long mSeq; // 회원번호
-
 }
