@@ -20,7 +20,7 @@ public interface SaveBoardDataRepository extends JpaRepository<SaveBoardData, Sa
      * @param mSeq
      * @return
      */
-    default List<Long> getBoardDataSeq(Long mSeq) {
+    default List<Long> getBoardDataSeqs(Long mSeq) {
         QSaveBoardData saveBoardData = QSaveBoardData.saveBoardData;
 
         List<SaveBoardData> items = (List<SaveBoardData>) findAll(saveBoardData.mSeq.eq(mSeq),
