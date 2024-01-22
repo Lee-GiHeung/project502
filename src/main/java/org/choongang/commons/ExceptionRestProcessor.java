@@ -1,32 +1,28 @@
 package org.choongang.commons;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.choongang.commons.exceptions.CommonException;
+import org.choongang.commons.rests.JSONData;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 public interface ExceptionRestProcessor {
     @ExceptionHandler(Exception.class)
-    default String errorHandler(Exception e, HttpServletRequest request, HttpServletResponse response, Model model) {
+    default ResponseEntity<JSONData<Object>> errorHandler(Exception e) {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
-
         if (e instanceof CommonException) {
-            CommonException commonException = (CommonException) e;
+            CommonException commonException = (CommonException)e;
             status = commonException.getStatus();
         }
 
-        response.setStatus(status.value());
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(false);
+        data.setStatus(status);
+        data.setMessage(e.getMessage());
 
         e.printStackTrace();
 
-        model.addAttribute("status", status.value());
-        model.addAttribute("path", request.getRequestURI());
-        model.addAttribute("method", request.getMethod());
-        model.addAttribute("message", e.getMessage());
-        return "error/common";
+        return ResponseEntity.status(status).body(data);
     }
-
 }

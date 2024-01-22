@@ -34,15 +34,14 @@ public class CommentSaveService {
         mode = StringUtils.hasText(mode) ? mode : "add";
 
         CommentData data = null;
-        if(mode.equals("edit") && seq != null) { // 댓글 수정
+        if (mode.equals("edit") && seq != null) { // 댓글 수정
             data = commentDataRepository.findById(seq).orElseThrow(CommentNotFoundException::new);
 
         } else { // 댓글 추가
             data = new CommentData();
             // 게시글 번호는 변경 X -> 추가할 때 최초 1번만 반영
             Long boardDataSeq = form.getBoardDataSeq();
-            BoardData boardData = boardDataRepository.findById(boardDataSeq)
-                .orElseThrow(BoardDataNotFoundException::new);
+            BoardData boardData = boardDataRepository.findById(boardDataSeq).orElseThrow(BoardDataNotFoundException::new);
 
             data.setBoardData(boardData);
 
@@ -52,18 +51,17 @@ public class CommentSaveService {
             data.setUa(request.getHeader("User-Agent"));
         }
 
-        // 비회원 비밀번호 0 -> 해시화 -> 저장
+        // 비회원 비밀번호 O -> 해시화 -> 저장
         String guestPw = form.getGuestPw();
-        if(StringUtils.hasText(guestPw)) {
+        if (StringUtils.hasText(guestPw)) {
             data.setGuestPw(encoder.encode(guestPw));
         }
 
         String commenter = form.getCommenter();
-        if(StringUtils.hasText(commenter)) {
+        if (StringUtils.hasText(commenter)) {
             data.setCommenter(commenter);
         }
 
-        data.setCommenter(form.getCommenter());
         data.setContent(form.getContent());
 
         commentDataRepository.saveAndFlush(data);
