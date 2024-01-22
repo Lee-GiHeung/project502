@@ -76,7 +76,7 @@ window.addEventListener("DOMContentLoaded", function(){
                         const { ajaxLoad } = commonLib;
 
                         try {
-                            const result = await ajaxLoad('GET', `api/comment/auth_validate?password=${guestPw}`);
+                            const result = await ajaxLoad('GET', `/api/comment/auth_validate?password=${guestPw}`);
 
                             callBackSuccess(seq); // textarea 보여주고,
 

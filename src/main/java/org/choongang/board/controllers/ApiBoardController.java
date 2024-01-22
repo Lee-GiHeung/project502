@@ -2,13 +2,14 @@ package org.choongang.board.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.service.SaveBoardDataService;
+import org.choongang.commons.ExceptionRestProcessor;
 import org.choongang.commons.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
-public class ApiBoardController {
+public class ApiBoardController implements ExceptionRestProcessor {
 
     private final SaveBoardDataService saveBoardDataService;
 

@@ -47,6 +47,11 @@ public class BoardSaveService {
 
             Board board = boardRepository.findById(form.getBid()).orElse(null);
             data.setBoard(board);
+
+            data.setParentSeq(form.getParentSeq()); // 부모 게시글 번호
+
+            long listOrder = System.currentTimeMillis();
+            data.setListOrder(listOrder);
         }
 
         data.setPoster(form.getPoster());
@@ -55,6 +60,7 @@ public class BoardSaveService {
         data.setCategory(form.getCategory());
         data.setEditorView(data.getBoard().isUseEditor());
 
+        
         // 추가 필드 - 정수
         data.setNum1(form.getNum1());
         data.setNum2(form.getNum2());
