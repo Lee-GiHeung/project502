@@ -146,6 +146,7 @@ public class BoardController implements ExceptionProcessor {
         content = String.format
             ("<br><br><br><br><br>============================<br>%s=========", content);
 
+        form.setBid(board.getBid());
         form.setContent(content);
         form.setParentSeq(parentSeq);
 
@@ -248,7 +249,7 @@ public class BoardController implements ExceptionProcessor {
 
         String pageTitle = board.getBName(); // 게시판명이 기본 타이틀
         
-        if(mode.equals("write") || mode.equals("update")) { // 쓰기 또는 수정 
+        if(mode.equals("write") || mode.equals("update") || mode.equals("reply")) { // 쓰기 또는 수정
             if(board.isUseEditor()) { // 에디터 사용하는 경우
                 addCommonScript.add("ckeditor5/ckeditor");
             }
