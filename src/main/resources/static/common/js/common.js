@@ -15,7 +15,6 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
     const token = document.querySelector("meta[name='_csrf']").content;
     const tokenHeader = document.querySelector("meta[name='_csrf_header']").content;
 
-
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
@@ -25,11 +24,16 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
         xhr.send(params); // 요청 body에 실릴 데이터 키=값&키=값& ... FormData 객체 (POST, PATCH, PUT)
 
         xhr.onreadystatechange = function() {
-            if (xhr.status == 200 && xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
                 const resData = (responseType && responseType.toLowerCase() == 'json') ?
                     JSON.parse(xhr.responseText) : xhr.responseText;
 
-                resolve(resData); // 성공시 응답 데이터
+                if (xhr.status == 200) {
+
+                    resolve(resData); // 성공시 응답 데이터
+                } else {
+                    reject(resData);
+                }
             }
         };
 
