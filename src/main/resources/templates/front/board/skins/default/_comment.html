@@ -25,7 +25,7 @@
                        class="delete_comment" th:text="#{삭제}" onclick="return confirm('정말 삭제하겠습니까?');"></a>
 
                     <button th:if="*{showEditButton}" type="button" class="edit_comment" th:data-seq="*{seq}"
-                        th:data="${edit}" th:data-editable="*{editable}" th:text="#{수정}"></button>
+                        th:data-editable="*{editable}" th:text="#{수정}"></button>
                 </div>
             </li>
         </ul>

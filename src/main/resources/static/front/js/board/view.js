@@ -1,6 +1,6 @@
-window.addEventListener("DOMContentLoaded", function(){
+window.addEventListener("DOMContentLoaded", function() {
     // 댓글 작성 후 URL에 comment_id=댓글 등록번호 -> hash 추가 -> 이동
-    if(location.search.indexOf("comment_id=") != -1 ) {
+    if (location.search.indexOf("comment_id=") != -1) {
         const searchParams = new URLSearchParams(location.search);
 
         const seq = searchParams.get("comment_id");
@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
         //location.search = searchParams.toString();
 
-        location.hash = `comment_${seq}`;
+        location.hash = `#comment_${seq}`;
     }
 
     /* 댓글 수정 버튼 클릭 처리 S */
@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", function(){
         el.addEventListener("click", function() {
             const dataset = this.dataset;
             const seq = dataset.seq;
-            const commentEl = document.getElementById(`comment_${dataset.seq}`);
+            const commentEl = document.getElementById(`comment_${seq}`);
             const targetEl = commentEl.querySelector(".comment");
 
             /**
@@ -35,10 +35,10 @@ window.addEventListener("DOMContentLoaded", function(){
 
                 const { ajaxLoad } = commonLib;
 
-                ajaxLoad('PATCH', 'api/comment', formData, 'json')
+                ajaxLoad('PATCH', '/api/comment', formData, 'json')
                     .then(res => {
                         targetEl.innerHTML = content.replace(/\n/gm, '<br>')
-                                            .replace(/\r/gm, '')
+                                                     .replace(/\r/gm, '')
 
 
                     })
@@ -78,7 +78,7 @@ window.addEventListener("DOMContentLoaded", function(){
                         try {
                             const result = await ajaxLoad('GET', `/api/comment/auth_validate?password=${guestPw}`);
 
-                            callBackSuccess(seq); // textarea 보여주고,
+                            callbackSuccess(seq); // textarea 보여주고,
 
                         } catch (err) { // 비밀번호 검증 실패시
                             alert('비밀번호가 일치하지 않습니다.');
@@ -250,5 +250,4 @@ window.addEventListener("DOMContentLoaded", function(){
                     .catch(err => console.log(err));
                 */
     /* 댓글 수정 버튼 클릭 처리 E */
-
 });
