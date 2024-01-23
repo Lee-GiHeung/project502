@@ -37,8 +37,7 @@ public class CommentInfoService {
      * @return
      */
     public CommentData get(Long seq) {
-        CommentData data = commentDataRepository.findById(seq)
-            .orElseThrow(CommentNotFoundException::new);
+        CommentData data = commentDataRepository.findById(seq).orElseThrow(CommentNotFoundException::new);
 
         addCommentInfo(data);
 
@@ -65,13 +64,13 @@ public class CommentInfoService {
         BooleanBuilder andBuilder = new BooleanBuilder();
         andBuilder.and(commentData.boardData.seq.eq(boardDataSeq));
 
-        List<CommentData> items = (List<CommentData>) commentDataRepository.findAll(andBuilder,
-            Sort.by(desc("listOrder"), asc("createdAt")));
+        List<CommentData> items = (List<CommentData>)commentDataRepository.findAll(andBuilder, Sort.by(desc("listOrder"), asc("createdAt")));
 
         items.forEach(this::addCommentInfo);
 
         return items;
     }
+
 
     /**
      * 댓글 추가 정보 처리
@@ -87,7 +86,7 @@ public class CommentInfoService {
          * 1) 관리자는 댓글 수정, 삭제 제한 없음
          *
          */
-        if(memberUtil.isAdmin()) {
+        if (memberUtil.isAdmin()) {
             editable = deletable = true;
         }
 
@@ -95,16 +94,16 @@ public class CommentInfoService {
          * 회원이 작성한 댓글이면 현재 로그인 사용자의 아이디와 동일해야 수정, 삭제 가능
          *
          */
-        if(_member != null && memberUtil.isLogin()
+        if (_member != null && memberUtil.isLogin()
                 && _member.getUserId().equals(memberUtil.getMember().getUserId())) {
             editable = deletable = mine = true;
         }
 
-        // 비회원 -> 비회원 비밀번호가 확인된 경우 삭제, 수정 가능
-        // 비회원 비밀번호 인증 여부 세션에 있는 guest_confirmed_게시글번호 true-> 인증
+        // 비회원 -> 비회원 비밀번호가 확인 된 경우 삭제, 수정 가능
+        // 비회원 비밀번호 인증 여부 세션에 있는 guest_confirmed_게시글번호 true -> 인증
         HttpSession session = request.getSession();
         String key = "guest_comment_confirmed_" + data.getSeq();
-        Boolean guestConfirmed = (Boolean) session.getAttribute(key);
+        Boolean guestConfirmed = (Boolean)session.getAttribute(key);
         if (_member == null && guestConfirmed != null && guestConfirmed) {
             editable = true;
             deletable = true;
@@ -125,19 +124,20 @@ public class CommentInfoService {
     }
 
     /**
-     * 게시글 별 댓글수 업데이트
+     * 게시글별 댓글 수 업데이트
      *
      * @param boardDataSeq : 게시글 번호
      */
     public void updateCommentCount(Long boardDataSeq) {
         BoardData data = boardDataRepository.findById(boardDataSeq).orElse(null);
-        if(data == null) {
+        if (data == null) {
             return;
         }
 
         int total = commentDataRepository.getTotal(boardDataSeq);
 
         data.setCommentCount(total);
+
         boardDataRepository.flush();
 
     }

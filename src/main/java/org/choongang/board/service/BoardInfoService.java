@@ -50,7 +50,7 @@ public class BoardInfoService {
 
     /**
      * 게시글 조회
-     * 
+     *
      * @param seq : 게시글 번호
      * @return
      */
@@ -88,23 +88,25 @@ public class BoardInfoService {
 
     /**
      * 특정 게시판 목록 조회
-     * 
+     *
      * @param bid : 게시판 아이디
      * @param search
      * @return
      */
     public ListData<BoardData> getList(String bid, BoardDataSearch search) {
 
-        Board board = configInfoService.get(bid);
+        Board board = StringUtils.hasText(bid) ? configInfoService.get(bid) : new Board();
 
         int page = Utils.onlyPositiveNumber(search.getPage(), 1);
         int limit = Utils.onlyPositiveNumber(search.getLimit(), board.getRowsPerPage());
         int offset = (page - 1) * limit; // 레코드 시작 위치
-        
+
         QBoardData boardData = QBoardData.boardData;
         BooleanBuilder andBuilder = new BooleanBuilder();
 
-        andBuilder.and(boardData.board.bid.eq(bid)); // 게시판 ID
+        if(StringUtils.hasText(bid)) {
+            andBuilder.and(boardData.board.bid.eq(bid)); // 게시판 ID
+        }
 
         /* 검색 조건 처리 S */
 
@@ -171,6 +173,7 @@ public class BoardInfoService {
                 .orderBy(
                         new OrderSpecifier(Order.DESC, pathBuilder.get("notice")),
                         new OrderSpecifier(Order.DESC, pathBuilder.get("listOrder")),
+                        new OrderSpecifier(Order.ASC, pathBuilder.get("listOrder2")),
                         new OrderSpecifier(Order.DESC, pathBuilder.get("createdAt"))
                         )
                 .fetch();
@@ -185,9 +188,14 @@ public class BoardInfoService {
         return new ListData<>(items, pagination);
     }
 
+    public ListData<BoardData> getList(BoardDataSearch search) {
+        return getList(null, search);
+    }
+
+
     /**
      * 최신 게시글
-     * 
+     *
      * @param bid : 게시판 아이디
      * @param limit : 조회할 개수
      * @return
@@ -218,7 +226,7 @@ public class BoardInfoService {
         List<FileInfo> attachFiles = fileInfoService.getListDone(gid, "attach");
 
         boardData.setEditorFiles(editorFiles);
-        boardData.setAttachFiles(editorFiles);
+        boardData.setAttachFiles(attachFiles);
         /* 파일 정보 추가 E */
 
         /* 수정, 삭제 권한 정보 처리 S */
@@ -229,16 +237,16 @@ public class BoardInfoService {
         if(memberUtil.isAdmin()) {
             editable = true;
             deletable = true;
-        } 
-        
+        }
+
         // 회원 -> 직접 작성한 게시글만 삭제, 수정 가능
         Member member = memberUtil.getMember();
-        if(_member != null && memberUtil.isLogin() && _member.getUserId().equals(_member.getUserId())) {
+        if(_member != null && memberUtil.isLogin() && _member.getUserId().equals(member.getUserId())) {
             editable = true;
             deletable = true;
             mine = true;
         }
-            
+
         // 비회원 -> 비회원 비밀번호가 확인된 경우 삭제, 수정 가능
         // 비회원 비밀번호 인증 여부 세션에 있는 guest_confirmed_게시글번호 true-> 인증
         HttpSession session = request.getSession();
@@ -290,7 +298,7 @@ public class BoardInfoService {
 
     /**
      * 게시글 조회수 업데이트
-     * 
+     *
      * @param seq : 게시글 번호
      */
     public void updateViewCount(Long seq) {
